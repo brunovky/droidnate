@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.brunooliveira.droidnate.annotations.Column;
 import com.brunooliveira.droidnate.annotations.Entity;
 import com.brunooliveira.droidnate.annotations.ForeignKey;
-import com.brunooliveira.droidnate.annotations.NotNull;
+import com.brunooliveira.droidnate.annotations.PrimaryKey;
 import com.brunooliveira.droidnate.exception.DroidnateException;
 import com.brunooliveira.droidnate.helper.DatabaseHelper;
 
@@ -60,15 +60,15 @@ public class DAO<T> {
 		ContentValues values = new ContentValues();
 		for (Field field : entity.getClass().getDeclaredFields()) {
 			field.setAccessible(true);
-			if (!field.isAnnotationPresent(Column.class)) {
+			if (!field.isAnnotationPresent(PrimaryKey.class) || !field.getAnnotation(PrimaryKey.class).autoIncrement()) {
 				try {
 					putValues(entity, field, values);
 				} catch (IllegalAccessException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (IllegalArgumentException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (NoSuchFieldException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				}
 			}
 		}
@@ -92,15 +92,15 @@ public class DAO<T> {
 		ContentValues values = new ContentValues();
 		for (Field field : entity.getClass().getDeclaredFields()) {
 			field.setAccessible(true);
-			if (!field.isAnnotationPresent(Column.class)) {
+            if (!field.isAnnotationPresent(PrimaryKey.class) || !field.getAnnotation(PrimaryKey.class).autoIncrement()) {
 				try {
 					putValues(entity, field, values);
 				} catch (IllegalAccessException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (IllegalArgumentException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (NoSuchFieldException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				}
 			}
 		}
@@ -160,13 +160,13 @@ public class DAO<T> {
 					c.close();
 					return (T) obj;
 				} catch (InstantiationException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (IllegalAccessException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (IllegalArgumentException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (ParseException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				}
 			}
 			c.close();
@@ -189,7 +189,7 @@ public class DAO<T> {
 		Class<T> entityClass = clazz;
 		if (entityClass.isAnnotationPresent(Entity.class)) {
 			tableName = entityClass.getAnnotation(Entity.class).name().equals("") ? entityClass.getSimpleName() : entityClass.getAnnotation(Entity.class).name();
-			Cursor c = db.query(tableName, getColumns(entityClass), where, whereArgs, null, null, null);
+			Cursor c = db.query(tableName, getColumns(entityClass), where, whereArgs, null, null, orderBy);
 			c.moveToFirst();
 			if (c.getCount() > 0) {
 				try {
@@ -211,13 +211,13 @@ public class DAO<T> {
 					c.close();
 					return objs;
 				} catch (InstantiationException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (IllegalAccessException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (IllegalArgumentException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (ParseException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				}
 			}
 			c.close();
@@ -242,7 +242,7 @@ public class DAO<T> {
 		Class<T> entityClass = clazz;
 		if (entityClass.isAnnotationPresent(Entity.class)) {
 			tableName = entityClass.getAnnotation(Entity.class).name().equals("") ? entityClass.getSimpleName() : entityClass.getAnnotation(Entity.class).name();
-			Cursor c = db.query(tableName, getColumns(entityClass), where, whereArgs, null, null, null);
+			Cursor c = db.query(tableName, getColumns(entityClass), where, whereArgs, null, null, orderBy);
 			c.moveToPosition(offset);
 			if (c.getCount() > 0) {
 				try {
@@ -266,13 +266,13 @@ public class DAO<T> {
 					c.close();
 					return objs;
 				} catch (InstantiationException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (IllegalAccessException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (IllegalArgumentException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (ParseException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				}
 			}
 			c.close();
@@ -293,7 +293,7 @@ public class DAO<T> {
 		Class<T> entityClass = clazz;
 		if (entityClass.isAnnotationPresent(Entity.class)) {
 			tableName = entityClass.getAnnotation(Entity.class).name().equals("") ? entityClass.getSimpleName() : entityClass.getAnnotation(Entity.class).name();
-			Cursor c = db.query(tableName, getColumns(entityClass), null, null, null, null, null);
+			Cursor c = db.query(tableName, getColumns(entityClass), null, null, null, null, orderBy);
 			c.moveToFirst();
 			if (c.getCount() > 0) {
 				try {
@@ -315,13 +315,13 @@ public class DAO<T> {
 					c.close();
 					return objs;
 				} catch (InstantiationException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (IllegalAccessException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (IllegalArgumentException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (ParseException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				}
 			}
 			c.close();
@@ -344,7 +344,7 @@ public class DAO<T> {
 		Class<T> entityClass = clazz;
 		if (entityClass.isAnnotationPresent(Entity.class)) {
 			tableName = entityClass.getAnnotation(Entity.class).name().equals("") ? entityClass.getSimpleName() : entityClass.getAnnotation(Entity.class).name();
-			Cursor c = db.query(tableName, getColumns(entityClass), null, null, null, null, null);
+			Cursor c = db.query(tableName, getColumns(entityClass), null, null, null, null, orderBy);
 			c.moveToPosition(offset);
 			if (c.getCount() > 0) {
 				try {
@@ -368,13 +368,13 @@ public class DAO<T> {
 					c.close();
 					return objs;
 				} catch (InstantiationException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (IllegalAccessException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (IllegalArgumentException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				} catch (ParseException e) {
-					throw new DroidnateException("Droidnate Error :: DAO", e);
+					throw new DroidnateException(DAO.class.getSimpleName(), e);
 				}
 			}
 			c.close();
@@ -398,8 +398,6 @@ public class DAO<T> {
 	}
 
 	private void putValues(T entity, Field field, ContentValues values) throws IllegalAccessException, IllegalArgumentException, NoSuchFieldException, DroidnateException {
-		if (field.isAnnotationPresent(NotNull.class) && field.get(entity) == null) { throw new DroidnateException("Droidnate Error :: DAO", new Throwable(field.getAnnotation(NotNull.class)
-				.errorMessage().equals("{0} can't be null") ? field.getAnnotation(NotNull.class).errorMessage().replace("{0}", field.getName()) : field.getAnnotation(NotNull.class).errorMessage())); }
 		if (field.isAnnotationPresent(ForeignKey.class)) {
 			ForeignKey fk = field.getAnnotation(ForeignKey.class);
 			if (field.get(entity) != null) {
@@ -409,7 +407,9 @@ public class DAO<T> {
 			} else {
 				values.putNull(fk.fieldName().equals("") ? field.getName() : fk.fieldName());
 			}
-		} else if (field.getType().equals(boolean.class)) {
+		} else if (field.get(entity) == null) {
+          values.putNull(getFieldName(field));
+        } else if (field.getType().equals(boolean.class)) {
 			values.put(getFieldName(field), Boolean.parseBoolean(field.get(entity).toString()));
 		} else if (field.getType().equals(byte.class)) {
 			values.put(getFieldName(field), Byte.parseByte(field.get(entity).toString()));

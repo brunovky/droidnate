@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class ValidatorTest extends AndroidTestCase {
 
-    public void testValidateNullEntityObject() {
+    public void test01ValidateNullEntityObject() {
         User user = null;
         try {
             ValidatorUtil.validate(user);
@@ -24,7 +24,7 @@ public class ValidatorTest extends AndroidTestCase {
         }
     }
 
-    public void testValidateNotEntityObject() {
+    public void test02ValidateNotEntityObject() {
         String object = new String("VALIDATOR TEST");
         try {
             ValidatorUtil.validate(object);
@@ -35,7 +35,7 @@ public class ValidatorTest extends AndroidTestCase {
         }
     }
 
-    public void testValidateCPF() {
+    public void test03ValidateCPF() {
         User user = new User();
         user.setCpf("111.111.111-11");
         try {
@@ -46,7 +46,7 @@ public class ValidatorTest extends AndroidTestCase {
         }
     }
 
-    public void testValidatePast() {
+    public void test04ValidatePast() {
         User user = new User();
         user.setCpf("181.437.116-84");
         Calendar dateOfBirth = Calendar.getInstance();
@@ -60,7 +60,7 @@ public class ValidatorTest extends AndroidTestCase {
         }
     }
 
-    public void testValidateEmail() {
+    public void test05ValidateEmail() {
         User user = new User();
         user.setCpf("181.437.116-84");
         Calendar dateOfBirth = Calendar.getInstance();
@@ -75,7 +75,7 @@ public class ValidatorTest extends AndroidTestCase {
         }
     }
 
-    public void testValidateFuture() {
+    public void test06ValidateFuture() {
         User user = new User();
         user.setCpf("181.437.116-84");
         Calendar dateOfBirth = Calendar.getInstance();
@@ -92,7 +92,7 @@ public class ValidatorTest extends AndroidTestCase {
         }
     }
 
-    public void testValidateNotNull() {
+    public void test07ValidateNotNull() {
         User user = new User();
         user.setCpf("181.437.116-84");
         Calendar dateOfBirth = Calendar.getInstance();
@@ -113,7 +113,7 @@ public class ValidatorTest extends AndroidTestCase {
         }
     }
 
-    public void testValidateLength() {
+    public void test08ValidateLength() {
         User user = new User();
         user.setCpf("181.437.116-84");
         Calendar dateOfBirth = Calendar.getInstance();
@@ -135,7 +135,7 @@ public class ValidatorTest extends AndroidTestCase {
         }
     }
 
-    public void testValidateValidator() {
+    public void test09ValidateValidator() {
         User user = new User();
         user.setCpf("181.437.116-84");
         Calendar dateOfBirth = Calendar.getInstance();
@@ -161,7 +161,7 @@ public class ValidatorTest extends AndroidTestCase {
         }
     }
 
-    public void testValidateNotEmpty() {
+    public void test10ValidateNotEmpty() {
         User user = new User();
         user.setCpf("181.437.116-84");
         Calendar dateOfBirth = Calendar.getInstance();
@@ -186,7 +186,7 @@ public class ValidatorTest extends AndroidTestCase {
         }
     }
 
-    public void testValidatePattern() {
+    public void test11ValidatePattern() {
         User user = new User();
         user.setCpf("181.437.116-84");
         Calendar dateOfBirth = Calendar.getInstance();
@@ -212,7 +212,7 @@ public class ValidatorTest extends AndroidTestCase {
         }
     }
 
-    public void testValidateMask() {
+    public void test12ValidateMask() {
         User user = new User();
         user.setCpf("181.437.116-84");
         Calendar dateOfBirth = Calendar.getInstance();

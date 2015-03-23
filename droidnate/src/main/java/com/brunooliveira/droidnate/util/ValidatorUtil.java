@@ -1,6 +1,8 @@
 package com.brunooliveira.droidnate.util;
 
 import android.app.Activity;
+import android.content.Context;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -8,6 +10,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.brunooliveira.droidnate.annotations.CPF;
 import com.brunooliveira.droidnate.annotations.Email;
@@ -52,6 +55,7 @@ import java.util.Date;
  */
 public final class ValidatorUtil {
 
+    private static View errorView;
     private static String errorMessage;
 
     public static boolean validate(Object entity) throws DroidnateException {
@@ -63,52 +67,52 @@ public final class ValidatorUtil {
             Annotation[] annotations = field.getDeclaredAnnotations();
             for (Annotation annotation : annotations) {
                 try {
-                    if (annotation.getClass().equals(CPF.class)) {
+                    if (annotation.annotationType().equals(CPF.class)) {
                         boolean result = validateCPF(field, entity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(Email.class)) {
+                    if (annotation.annotationType().equals(Email.class)) {
                         boolean result = validateEmail(field, entity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(Future.class)) {
+                    if (annotation.annotationType().equals(Future.class)) {
                         boolean result = validateFuture(field, entity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(Length.class)) {
+                    if (annotation.annotationType().equals(Length.class)) {
                         boolean result = validateLength(field, entity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(Mask.class)) {
+                    if (annotation.annotationType().equals(Mask.class)) {
                         boolean result = validateMask(field, entity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(NotEmpty.class)) {
+                    if (annotation.annotationType().equals(NotEmpty.class)) {
                         boolean result = validateNotEmpty(field, entity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(NotNull.class)) {
+                    if (annotation.annotationType().equals(NotNull.class)) {
                         boolean result = validateNotNull(field, entity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(Past.class)) {
+                    if (annotation.annotationType().equals(Past.class)) {
                         boolean result = validatePast(field, entity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(Pattern.class)) {
+                    if (annotation.annotationType().equals(Pattern.class)) {
                         boolean result = validatePattern(field, entity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(Validator.class)) {
+                    if (annotation.annotationType().equals(Validator.class)) {
                         boolean result = validateValidator(field, entity);
                         if (!result) return false;
                     }
@@ -128,42 +132,42 @@ public final class ValidatorUtil {
             Annotation[] annotations = field.getDeclaredAnnotations();
             for (Annotation annotation : annotations) {
                 try {
-                    if (annotation.getClass().equals(Length.class)) {
+                    if (annotation.annotationType().equals(Length.class)) {
                         boolean result = validateViewLength(field, activity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(Mask.class)) {
+                    if (annotation.annotationType().equals(Mask.class)) {
                         boolean result = validateViewMask(field, activity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(NoImage.class)) {
+                    if (annotation.annotationType().equals(NoImage.class)) {
                         boolean result = validateNoImage(field, activity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(NotChecked.class)) {
+                    if (annotation.annotationType().equals(NotChecked.class)) {
                         boolean result = validateNotChecked(field, activity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(NotEmpty.class)) {
+                    if (annotation.annotationType().equals(NotEmpty.class)) {
                         boolean result = validateViewNotEmpty(field, activity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(NotSelected.class)) {
+                    if (annotation.annotationType().equals(NotSelected.class)) {
                         boolean result = validateNotSelected(field, activity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(Pattern.class)) {
+                    if (annotation.annotationType().equals(Pattern.class)) {
                         boolean result = validateViewPattern(field, activity);
                         if (result) continue;
                         else return false;
                     }
-                    if (annotation.getClass().equals(ViewValidator.class)) {
+                    if (annotation.annotationType().equals(ViewValidator.class)) {
                         boolean result = validateViewValidator(field, activity);
                         if (!result) return false;
                     }
@@ -177,6 +181,21 @@ public final class ValidatorUtil {
 
     public static String getErrorMessage() {
         return errorMessage;
+    }
+
+    public static void showErrorInView() {
+        if (errorView != null) {
+            if (errorView.getClass().equals(EditText.class) || errorView.getClass().equals(TextView.class)) {
+                ((TextView) errorView).setError(errorMessage);
+                errorView.requestFocus();
+            }
+        }
+    }
+
+    public static void showErrorInToast(Context context, int toastLength) {
+        if (errorMessage != null) {
+            Toast.makeText(context, errorMessage, toastLength).show();
+        }
     }
 
     private static boolean validateCPF(Field field, Object entity) throws IllegalAccessException, DroidnateException {
@@ -239,7 +258,7 @@ public final class ValidatorUtil {
     }
 
     private static boolean validatePast(Field field, Object entity) throws IllegalAccessException, DroidnateException {
-        if (!field.getType().equals(String.class)) throw new DroidnateException(ValidatorUtil.class.getSimpleName(), "The @Past Annotation needs a field of Date or Calendar type.");
+        if (!field.getType().equals(Date.class) && !field.getType().equals(Calendar.class)) throw new DroidnateException(ValidatorUtil.class.getSimpleName(), "The @Past Annotation needs a field of Date or Calendar type.");
         PastValidator validator = new PastValidator();
         boolean valid = validator.validate(field.get(entity));
         if (!valid) errorMessage = field.getAnnotation(Past.class).errorMessage().replace("{0}", field.getName());
@@ -268,9 +287,12 @@ public final class ValidatorUtil {
         Length length = field.getAnnotation(Length.class);
         LengthViewValidator validator = new LengthViewValidator(length.min(), length.max());
         boolean valid = validator.validate((android.view.View) field.get(activity));
-        if (!valid) errorMessage = length.errorMessage().replace("{0}", field.getName())
-                .replace("{1}", String.valueOf(length.min()))
-                .replace("{2}", String.valueOf(length.max()));
+        if (!valid) {
+            errorMessage = length.errorMessage().replace("{0}", field.getName())
+                    .replace("{1}", String.valueOf(length.min()))
+                    .replace("{2}", String.valueOf(length.max()));
+            errorView = (View) field.get(activity);
+        }
         return valid;
     }
 
@@ -279,7 +301,10 @@ public final class ValidatorUtil {
         Mask mask = field.getAnnotation(Mask.class);
         MaskViewValidator validator = new MaskViewValidator(mask.mask());
         boolean valid = validator.validate((android.view.View) field.get(activity));
-        if (!valid) errorMessage = mask.errorMessage();
+        if (!valid) {
+            errorMessage = mask.errorMessage();
+            errorView = (View) field.get(activity);
+        }
         return valid;
     }
 
@@ -287,7 +312,10 @@ public final class ValidatorUtil {
         if (!field.getType().equals(ImageView.class)) throw new DroidnateException(ValidatorUtil.class.getSimpleName(), "The @NoImage Annotation needs a field of ImageView type.");
         NoImageViewValidator validator = new NoImageViewValidator();
         boolean valid = validator.validate((android.view.View) field.get(activity));
-        if (!valid) errorMessage = field.getAnnotation(NoImage.class).errorMessage().replace("{0}", field.getName());
+        if (!valid) {
+            errorMessage = field.getAnnotation(NoImage.class).errorMessage().replace("{0}", field.getName());
+            errorView = (View) field.get(activity);
+        }
         return valid;
     }
 
@@ -295,7 +323,10 @@ public final class ValidatorUtil {
         if (!field.getType().equals(CheckBox.class)) throw new DroidnateException(ValidatorUtil.class.getSimpleName(), "The @NotChecked Annotation needs a field of CheckBox type.");
         NotCheckedViewValidator validator = new NotCheckedViewValidator();
         boolean valid = validator.validate((android.view.View) field.get(activity));
-        if (!valid) errorMessage = field.getAnnotation(NotChecked.class).errorMessage().replace("{0}", field.getName());
+        if (!valid) {
+            errorMessage = field.getAnnotation(NotChecked.class).errorMessage().replace("{0}", field.getName());
+            errorView = (View) field.get(activity);
+        }
         return valid;
     }
 
@@ -303,7 +334,10 @@ public final class ValidatorUtil {
         if (!field.getType().equals(EditText.class) && !field.getType().equals(TextView.class)) throw new DroidnateException(ValidatorUtil.class.getSimpleName(), "The @NotEmpty Annotation needs a field of EditText or TextView type.");
         NotEmptyViewValidator validator = new NotEmptyViewValidator();
         boolean valid = validator.validate((android.view.View) field.get(activity));
-        if (!valid) errorMessage = field.getAnnotation(NotEmpty.class).errorMessage().replace("{0}", field.getName());
+        if (!valid) {
+            errorMessage = field.getAnnotation(NotEmpty.class).errorMessage().replace("{0}", field.getName());
+            errorView = (View) field.get(activity);
+        }
         return valid;
     }
 
@@ -311,7 +345,10 @@ public final class ValidatorUtil {
         if (!field.getType().equals(Spinner.class) && !field.getType().equals(RadioGroup.class) && !field.getType().equals(RadioButton.class)) throw new DroidnateException(ValidatorUtil.class.getSimpleName(), "The @NotSelected Annotation needs a field of Spinner, RadioGroup or RadioButton type.");
         NotSelectedViewValidator validator = new NotSelectedViewValidator();
         boolean valid = validator.validate((android.view.View) field.get(activity));
-        if (!valid) errorMessage = field.getAnnotation(NotSelected.class).errorMessage().replace("{0}", field.getName());
+        if (!valid) {
+            errorMessage = field.getAnnotation(NotSelected.class).errorMessage().replace("{0}", field.getName());
+            errorView = (View) field.get(activity);
+        }
         return valid;
     }
 
@@ -320,7 +357,10 @@ public final class ValidatorUtil {
         Pattern pattern = field.getAnnotation(Pattern.class);
         PatternViewValidator validator = new PatternViewValidator(pattern.regex());
         boolean valid = validator.validate((android.view.View) field.get(activity));
-        if (!valid) errorMessage = pattern.errorMessage();
+        if (!valid) {
+            errorMessage = pattern.errorMessage();
+            errorView = (View) field.get(activity);
+        }
         return valid;
     }
 
@@ -328,7 +368,10 @@ public final class ValidatorUtil {
         ViewValidator validatorAnnot = field.getAnnotation(ViewValidator.class);
         com.brunooliveira.droidnate.validator.ViewValidator validator = validatorAnnot.validatorClass().newInstance();
         boolean valid = validator.validate((android.view.View) field.get(activity));
-        if (!valid) errorMessage = validatorAnnot.errorMessage();
+        if (!valid) {
+            errorMessage = validatorAnnot.errorMessage();
+            errorView = (View) field.get(activity);
+        }
         return valid;
     }
 
