@@ -1,7 +1,5 @@
 package com.brunooliveira.droidnate.validator;
 
-import java.util.InputMismatchException;
-
 /**
  * Created by Bruno on 21/03/2015.
  */

@@ -2,7 +2,6 @@ package com.brunooliveira.droidnate.validator;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.regex.Pattern;
 
 /**
  * Created by Bruno on 21/03/2015.

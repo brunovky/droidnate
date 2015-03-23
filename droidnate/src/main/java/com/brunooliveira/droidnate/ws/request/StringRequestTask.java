@@ -3,7 +3,6 @@ package com.brunooliveira.droidnate.ws.request;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.provider.Settings;
 import android.util.Log;
 
 import com.brunooliveira.droidnate.util.DroidnateUtil;
@@ -13,16 +12,13 @@ import com.brunooliveira.droidnate.ws.helper.WebServicesHelper;
 import com.brunooliveira.droidnate.ws.response.StringResponseHandler;
 import com.google.gson.GsonBuilder;
 
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.InputStream;
